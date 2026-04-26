@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zekun Song</title>
+
+    <!-- 引入 Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary-color: #0056b3;
+            --text-color: #333333;
+            --light-text: #666666;
+            --bg-color: #ffffff;
+            --border-color: #eeeeee;
+        }
+
+        /* 开启平滑滚动，点击右侧目录时滑动更顺畅 */
+        html {
+            scroll-behavior: smooth; 
+        }
+
+        body {
+            /* 换上了最高级的 Inter 字体 */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7; /* 稍微增加了行高，让阅读更舒适 */
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            letter-spacing: 0.2px; /* 增加了极微小的字间距，提升高级感 */
+        }
+
+        /* 顶部风景横幅 */
+        .top-banner {
+            width: 100%;
+            height: 220px;
+            /* 这里放了一张占位风景图，你可以换成本地的图片路径，比如 url('banner.jpg') */
+            background-image: url('image/4.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* 布局容器，改为三栏布局 */
+        .container {
+            display: flex;
+            max-width: 1150px; /* 加宽一点以容纳右侧目录 */
+            margin: 0 auto;
+            padding: 40px 20px;
+            gap: 50px;
+            position: relative;
+        }
+
+        /* 1. 左侧边栏 */
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            /* 头像稍微往上移动一点，和风景图产生交错的层次感，很帅 */
+            margin-top: -80px; 
+            position: relative;
+        }
+
+        .sidebar h1 {
+            font-size: 1.8em;
+            margin: 0 0 5px 0;
+        }
+
+        .sidebar h3 {
+            font-size: 1em;
+            color: var(--light-text);
+            font-weight: normal;
+            margin: 0 0 20px 0;
+        }
+
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .social-links {
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin-right: 12px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* 2. 中间主体内容 */
+        .content {
+            flex-grow: 1;
+            min-width: 0; /* 防止内容撑破容器 */
+        }
+
+        h2 {
+            font-size: 1.4em;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        section {
+            margin-bottom: 50px;
+            /* 防止锚点跳转时标题被贴到浏览器最顶部 */
+            scroll-margin-top: 30px; 
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* 项目列表 */
+        .pub-item {
+            margin-bottom: 25px;
+        }
+
+        .pub-title {
+            font-weight: 600;
+            font-size: 1.05em;
+            margin-bottom: 3px;
+        }
+
+        .pub-authors {
+            color: var(--text-color);
+            margin-bottom: 3px;
+            font-size: 0.95em;
+        }
+
+        .pub-venue {
+            font-style: italic;
+            color: var(--light-text);
+            font-size: 0.95em;
+            margin-bottom: 5px;
+        }
+
+        /* 时间轴列表 */
+        .news-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .news-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .news-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        .date {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-right: 10px;
+        }
+
+        /* 3. 右侧目录 (Index) */
+        .toc {
+            width: 140px;
+            flex-shrink: 0;
+            position: sticky; /* 悬浮固定效果 */
+            top: 40px; 
+            height: max-content;
+        }
+
+        .toc h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: var(--light-text);
+            padding-left: 12px;
+            display: block;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left: 2px solid var(--primary-color);
+            margin-left: -2px; /* 悬停时左侧边框变色凸显 */
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 992px) {
+            .toc {
+                display: none; /* 屏幕较小时隐藏右侧目录 */
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 20px 20px;
+                gap: 30px;
+            }
+            .sidebar {
+                width: 100%;
+                text-align: center;
+            }
+            .profile-pic {
+                margin: -70px auto 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 页面顶部的风景照片 -->
+<div class="top-banner"></div>
+
+<div class="container">
+    
+    <!-- 1. 左侧：个人信息 -->
+    <aside class="sidebar">
+        <!-- 替换为你的头像路径，如 src="profile.jpg" -->
+        <img src="image/2.jpg" alt="Profile Picture" class="profile-pic">
+        <h1>宋泽坤</h1>
+        <h1>Zekun Song</h1>
+        <h3>M.S. & Incoming Ph.D. Student<br>Nankai University</h3>
+        
+        <div class="contact-info">
+            <p>✉️ <a href="mailto:sszzww14276424@163.com" style="color: var(--primary-color); text-decoration: none;">sszzww14276424@163.com</a></p>
+        </div>
+
+        <div class="social-links">
+            <a href="#" target="_blank">Google Scholar</a>
+            <a href="https://github.com/ZeeeKun1" target="_blank">GitHub</a>
+            <a href="#" target="_blank">CV (PDF)</a>
+        </div>
+    </aside>
+
+    <!-- 2. 中间：主体内容 -->
+    <main class="content">
+        
+        <!-- 个人简介 -->
+        <section id="about">
+            <h2>About Me</h2>
+            <p>Hi! I am currently a Master's student in Software Engineering at <strong>Nankai University</strong>, advised by Prof. <a href="https://cs.nankai.edu.cn/info/1084/1127.htm" target="_blank" style="color: var(--primary-color);">Haining Zhang</a>. I am also a member of the User Experience and Human-Computer Interaction Lab (<a href="https://seami-lab.github.io" target="_blank" style="color: var(--primary-color);">SEAMi Lab</a>).</p>
+            
+            <p>Starting in the Fall of 2026, I will continue my academic journey at Nankai University as a Ph.D. student, where I will be supervised by Assoc. Prof. <a href="https://nancygao.com/" target="_blank" style="color: var(--primary-color);">Nan Gao</a>. My upcoming research will primarily focus on <strong>Human-Computer Interaction (HCI)</strong> and <strong>AI for Mental Health</strong>.</p>
+            
+            <p>Prior to my graduate studies, I received my Bachelor's degree from Harbin University of Commerce.</p>
+            
+            <p><em>I am always open to insightful discussions and research collaborations. Feel free to drop me an email!</em></p>
+        </section>
+
+        <!-- 发表与预印本论文 -->
+        <section id="publications">
+            <h2>Publications & Preprints</h2>
+            
+            <!-- 论文 1：一作准备重投 -->
+            <div class="pub-item">
+                <!-- 将精确标题模糊化为研究主题 -->
+                <div class="pub-title">A Technology Probe into AI-Mediated Relational Work</div>
+                <!-- 作者栏明确标注因为双盲而隐藏 -->
+                <div class="pub-authors">
+                    <span style="font-weight:bold; text-decoration:underline;">ZK.Song</span>, and collaborators. 
+                </div>
+                <div class="pub-venue" style="color: #d9534f; font-weight: 500;">[In Revision]</div>
+                <p style="font-size: 0.9em; color: var(--light-text); margin-top: 3px;">
+                    This paper investigates how an AI-driven digital counselor can effectively support relational work and reduce human workload through a deployed technology probe.
+                </p>
+            </div>
+
+            <!-- 论文 2：二作在投 -->
+            <div class="pub-item">
+                <!-- 将精确标题模糊化为研究主题 -->
+                <div class="pub-title">An Exploratory Study of Embodied Chatbot Interventions for Social Anxiety</div>
+                <div class="pub-authors">
+                    AN. Liu, <span style="font-weight:bold; text-decoration:underline;">ZK.Song</span>, and collaborators. 
+                </div>
+                <div class="pub-venue" style="color: #f0ad4e; font-weight: 500;">[Under Review]</div>
+                <p style="font-size: 0.9em; color: var(--light-text); margin-top: 3px;">
+                    This study explores the design and effectiveness of embodied conversational agents as interventions for social anxiety in collaborative tasks.
+                </p>
+            </div>
+            
+        </section>
+
+<!-- 研究项目 -->
+        <section id="projects">
+            <h2>Research Projects</h2>
+
+            <!-- 项目 1: AI开开和AI智辅 -->
+            <div class="pub-item">
+                <div class="pub-title">AI Kaikai & AI Zhifu: Intelligent Campus Assistants</div>
+                <div class="pub-authors"><strong>Role:</strong> Project Lead & Core Developer </div>
+                <div class="pub-venue">Deployed at Nankai University</div>
+                <p style="font-size: 0.95em; color: var(--text-color); margin-top: 5px;">
+                    Led the development of AI-driven conversational agents using single- and multi-agent architectures to serve students and counselors. Beyond providing on-demand answers to campus-related queries, the system is uniquely designed to offer preliminary psychological support and emotional scaffolding.
+                </p>
+            </div>
+
+            <!-- 项目 2: 心理预警平台 -->
+            <div class="pub-item">
+                <div class="pub-title">Machine Learning-based Psychological Early Warning Platform</div>
+                <div class="pub-authors"><strong>Role:</strong> Project Lead & Core Developer </div>
+                <div class="pub-venue">Collaborated with the Mental Health Center, SEAMi Lab, Nankai University</div>
+                <p style="font-size: 0.95em; color: var(--text-color); margin-top: 5px;">
+                    Developed a data-driven platform to predict mental health risks among university students. By training machine learning models on massive, multi-dimensional anonymized campus records, the system assists counselors in providing timely interventions while ensuring strict data privacy.
+                </p>
+            </div>
+
+            <!-- 项目 3: 无感知测评 -->
+            <div class="pub-item">
+                <div class="pub-title">Unobtrusive Mental Health Assessment via Daily Dialogue</div>
+                <div class="pub-authors"><strong>Role:</strong> Project Lead & Core Researcher</div>
+                <div class="pub-venue">Collaborated with the Mental Health Center, SEAMi Lab, Nankai University</div>
+                <p style="font-size: 0.95em; color: var(--text-color); margin-top: 5px;">
+                    This project explores innovative ways to passively assess students' psychological states through their natural language conversations. We aim to leverage LLMs to identify early signs of psychological distress without burdening users. We are currently developing the system prototype and preparing for the upcoming user study.
+                </p>
+            </div>
+
+            <!-- 项目 4: 代际冲突 -->
+            <div class="pub-item">
+                <div class="pub-title">Mediating Parent-Child Intergenerational Conflicts</div>
+                <div class="pub-authors"><strong>Role:</strong> Project Lead & Core Researcher</div>
+                <div class="pub-venue">Collaborated with the Mental Health Center, SEAMi Lab, Nankai University</div>
+                <p style="font-size: 0.95em; color: var(--text-color); margin-top: 5px;">
+                    Investigating technology-mediated solutions to bridge communication gaps between parents and children. We are currently developing an interactive system prototype aimed at fostering empathy, facilitating perspective-taking, and ultimately resolving family disputes.
+                </p>
+            </div>
+        </section>
+
+<!-- 教育经历 -->
+        <section id="education">
+            <h2>Education</h2>
+            <ul class="news-list">
+                <li><span class="date">2026.09 - Expected</span> <strong>Ph.D.</strong> in Software Engineering, Nankai University</li>
+                <li><span class="date">2023.09 - 2026.06</span> <strong>M.E.</strong> in Software Engineering, Nankai University</li>
+                <li><span class="date">2018.09 - 2022.06</span> <strong>B.E.</strong> in Printing Engineering, Harbin University of Commerce</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- 3. 右侧：目录导航 (Index) -->
+    <nav class="toc">
+        <h4>On this page</h4>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+        </ul>
+    </nav>
+
+</div>
+
+<!-- ================= HCI 专属交互特效脚本 ================= -->
+<script>
+    // 魔法 1：头像“捏捏乐”果冻特效
+    const avatar = document.querySelector('.profile-pic');
+    if(avatar) {
+        avatar.style.cursor = 'pointer';
+        // 添加贝塞尔曲线，让弹跳极其丝滑Q弹
+        avatar.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease';
+        
+        avatar.addEventListener('mousedown', () => {
+            // 鼠标按下：被捏扁，往下沉
+            avatar.style.transform = 'scale(0.9) scaleY(0.85) translateY(10px)';
+            avatar.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+        });
+        
+        avatar.addEventListener('mouseup', () => {
+            // 鼠标松开：回弹并稍微拉长
+            avatar.style.transform = 'scale(1.05) scaleY(1.1) translateY(-5px)';
+            avatar.style.boxShadow = '0 15px 25px rgba(0,0,0,0.15)';
+            // 延迟一点点恢复原状，形成果冻阻尼感
+            setTimeout(() => {
+                avatar.style.transform = 'scale(1) translateY(0)';
+            }, 300);
+        });
+        
+        avatar.addEventListener('mouseleave', () => {
+            avatar.style.transform = 'scale(1) translateY(0)';
+            avatar.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
+        });
+    }
+
+    // 魔法 2：苹果风 3D 视差项目卡片
+    const cards = document.querySelectorAll('.pub-item');
+    cards.forEach(card => {
+        // 给卡片加上基础的内边距和圆角，方便展示阴影
+        card.style.padding = '15px';
+        card.style.borderRadius = '12px';
+        card.style.transition = 'transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease';
+        
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            // 计算鼠标在卡片内的相对位置
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // 计算倾斜角度 (系数控制倾斜幅度，4表示最大倾斜4度)
+            const rotateX = ((y - centerY) / centerY) * -4;
+            const rotateY = ((x - centerX) / centerX) * 4;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            card.style.boxShadow = '0 15px 30px rgba(0,0,0,0.08)';
+            card.style.background = '#f9fbfd'; // 悬浮时带有极弱的蓝色背景
+            card.style.zIndex = '10';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            // 鼠标移出时，缓慢恢复原状
+            card.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease, background 0.5s ease';
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            card.style.boxShadow = 'none';
+            card.style.background = 'transparent';
+            card.style.zIndex = '1';
+            
+            // 动画结束后把 transition 速度调回来，防止下次移入时卡顿
+            setTimeout(() => { card.style.transition = 'transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease'; }, 500);
+        });
+    });
+
+    // 魔法 3：注入顶部阅读进度条
+    const progressBar = document.createElement('div');
+    progressBar.style.position = 'fixed';
+    progressBar.style.top = '0';
+    progressBar.style.left = '0';
+    progressBar.style.height = '3px';
+    progressBar.style.backgroundColor = 'var(--primary-color)';
+    progressBar.style.width = '0%';
+    progressBar.style.zIndex = '9999';
+    progressBar.style.transition = 'width 0.1s ease';
+    document.body.appendChild(progressBar);
+
+    window.addEventListener('scroll', () => {
+        // 计算当前滚动的百分比
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        progressBar.style.width = scrolled + '%';
+    });
+
+// =========================================================
+    // 【关键修复】防止所有动效撑破屏幕边缘导致滚动条抖动
+    document.body.style.overflowX = 'hidden';
+
+    // =========================================================
+    // 魔法 4：正念水滴涟漪特效 (Mindful Ripple)
+    document.addEventListener('click', function(e) {
+        // 忽略链接、卡片，以防干扰正常功能
+        if(e.target.closest('a') || e.target.closest('.pub-item')) return;
+        
+        const ripple = document.createElement('div');
+        // 改用 fixed 和 clientX/Y，防止绝对定位在边缘溢出
+        ripple.style.position = 'fixed'; 
+        ripple.style.left = e.clientX + 'px';
+        ripple.style.top = e.clientY + 'px';
+        ripple.style.width = '20px';
+        ripple.style.height = '20px';
+        ripple.style.border = '2px solid rgba(0, 86, 179, 0.4)'; 
+        ripple.style.borderRadius = '50%';
+        ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+        ripple.style.pointerEvents = 'none'; 
+        ripple.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
+        ripple.style.zIndex = '9997'; // 放在稍微靠下的层级
+        document.body.appendChild(ripple);
+
+        void ripple.offsetWidth; // 触发重绘
+        
+        ripple.style.transform = 'translate(-50%, -50%) scale(6)';
+        ripple.style.opacity = '0';
+
+        setTimeout(() => ripple.remove(), 800);
+    });
+
+    // =========================================================
+    // 魔法 5：右下角解压角落 (Anti-Stress Bubbles)
+    const stressBtn = document.createElement('div');
+    stressBtn.innerHTML = '☕'; 
+    stressBtn.style.position = 'fixed';
+    stressBtn.style.bottom = '20px';
+    stressBtn.style.right = '20px';
+    stressBtn.style.fontSize = '24px';
+    stressBtn.style.cursor = 'pointer';
+    stressBtn.style.opacity = '0.5';
+    stressBtn.style.transition = 'all 0.3s ease';
+    stressBtn.style.zIndex = '9999';
+    stressBtn.title = 'Need a break?'; 
+    
+    stressBtn.addEventListener('mouseenter', () => {
+        stressBtn.style.opacity = '1';
+        stressBtn.style.transform = 'scale(1.2)';
+    });
+    stressBtn.addEventListener('mouseleave', () => {
+        stressBtn.style.opacity = '0.5';
+        stressBtn.style.transform = 'scale(1)';
+    });
+
+    // 点击飘出治愈表情包
+    stressBtn.addEventListener('click', (e) => {
+        // 【关键修复】阻止事件向上传递，这样点杯子就不会触发背景的水滴涟漪了
+        e.stopPropagation(); 
+
+        stressBtn.style.transform = 'translateY(-10px) scale(1.2)';
+        setTimeout(() => stressBtn.style.transform = 'translateY(0) scale(1)', 150);
+
+        const emojis =['🌟', '🐾', '🍃', '☕', '🎵', '☁️', '🎈', '✨'];
+        
+        for(let i = 0; i < 6; i++) {
+           let bubble = document.createElement('div');
+           bubble.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+           bubble.style.position = 'fixed';
+           
+           // 【关键修复】改用 right 计算，防止漂浮物导致横向滚动条
+           bubble.style.right = (30 + Math.random() * 60) + 'px'; 
+           bubble.style.bottom = '40px';
+           bubble.style.fontSize = Math.random() * 15 + 15 + 'px';
+           bubble.style.pointerEvents = 'none';
+           bubble.style.zIndex = '9998';
+           bubble.style.transition = `transform ${Math.random() * 2 + 2}s ease-in, opacity ${Math.random() * 2 + 2}s ease-in`;
+           document.body.appendChild(bubble);
+
+           setTimeout(() => {
+               // 向上飘，同时轻微左右摇摆，不再允许往右飘出屏幕
+               let swayX = Math.random() * 60 - 40; 
+               bubble.style.transform = `translateY(-${Math.random() * 200 + 200}px) rotate(${Math.random() * 360}deg) translateX(${swayX}px)`;
+               bubble.style.opacity = '0';
+           }, 50);
+
+           setTimeout(() => bubble.remove(), 4000);
+        }
+    });
+    document.body.appendChild(stressBtn);
+
+
+    // =========================================================
+    // 魔法 6：HCI 极客彩蛋 (输入密码)
+    let keysPressed = '';
+    const secretCode = 'hci'; // 密码是键盘连续敲击 h c i
+    
+    window.addEventListener('keydown', (e) => {
+        keysPressed += e.key.toLowerCase();
+        // 只保留最后三个字符的长度
+        if (keysPressed.length > secretCode.length) {
+            keysPressed = keysPressed.slice(-secretCode.length);
+        }
+        
+        if (keysPressed === secretCode) {
+            // 触发彩蛋特效
+            triggerSecretEgg();
+            keysPressed = ''; // 重置
+        }
+    });
+
+    function triggerSecretEgg() {
+        // 创建一个温柔的提示横幅
+        const banner = document.createElement('div');
+        banner.innerHTML = '🎉 You found the secret! Keep calm and do HCI.';
+        banner.style.position = 'fixed';
+        banner.style.top = '-50px';
+        banner.style.left = '50%';
+        banner.style.transform = 'translateX(-50%)';
+        banner.style.background = 'var(--primary-color)';
+        banner.style.color = '#fff';
+        banner.style.padding = '10px 25px';
+        banner.style.borderRadius = '20px';
+        banner.style.fontWeight = 'bold';
+        banner.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+        banner.style.transition = 'top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        banner.style.zIndex = '10000';
+        document.body.appendChild(banner);
+
+        // 背景变个治愈的薄荷绿色闪烁一下
+        const originalBg = document.body.style.backgroundColor;
+        document.body.style.transition = 'background-color 1s ease';
+        document.body.style.backgroundColor = '#e8f5e9';
+
+        // 弹下来
+        setTimeout(() => banner.style.top = '20px', 100);
+        
+        // 3秒后恢复原状并收回
+        setTimeout(() => {
+            document.body.style.backgroundColor = originalBg;
+            banner.style.top = '-50px';
+            setTimeout(() => banner.remove(), 500);
+        }, 3000);
+    }
+
+
+</script>
+<!-- ========================================================= -->
+
+</body>
+</html>
