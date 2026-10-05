@@ -154,7 +154,7 @@ p { margin: 0 0 15px; text-wrap: pretty; }
   background: #f9fbfd;
   box-shadow: 0 8px 18px rgb(21 54 79 / 10%);
 }
-.pub-item:last-child { margin-bottom: 0; padding-bottom: 12px; border-bottom: 0; }
+.pub-item:last-of-type { margin-bottom: 0; padding-bottom: 12px; border-bottom: 0; }
 .pub-item p:last-child { margin-bottom: 0; }
 
 .pub-title {
@@ -167,7 +167,8 @@ p { margin: 0 0 15px; text-wrap: pretty; }
 .pub-authors { margin-bottom: 2px; font-size: 0.93rem; }
 .pub-venue { margin-bottom: 7px; color: var(--muted); font-size: 0.9rem; font-style: italic; }
 .self-author { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
-.author-note { color: var(--muted); font-size: 0.88rem; }
+.corresponding-star { margin-left: 1px; color: var(--accent); font-size: 0.8em; font-weight: 700; }
+.publication-note { margin-top: 12px; color: var(--muted); font-size: 0.85rem; }
 .pub-link { display: inline-block; font-size: 0.88rem; font-weight: 600; text-underline-offset: 3px; }
 
 .project-group + .project-group { margin-top: 36px; }
