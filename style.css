@@ -143,6 +143,9 @@ p { margin: 0 0 15px; text-wrap: pretty; }
 }
 .pub-authors { margin-bottom: 2px; font-size: 0.93rem; }
 .pub-venue { margin-bottom: 7px; color: var(--muted); font-size: 0.9rem; font-style: italic; }
+.self-author { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.author-note { color: var(--muted); font-size: 0.88rem; }
+.pub-link { display: inline-block; font-size: 0.88rem; font-weight: 600; text-underline-offset: 3px; }
 
 .news-list { margin: 0; padding: 0; list-style: none; }
 .news-list li {
